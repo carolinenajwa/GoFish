@@ -73,6 +73,7 @@ public class GoFishMain {
 		//while the deck is not empty and we don't have more than 52
 		while (computerPile.size() + humanPile.size() < 52 || !deck.isEmpty()) {
 
+
 			// User plays first
 			if (!human.isEmpty() && deck.size() > 0) {
 				// Requests card from opponent
@@ -87,6 +88,8 @@ public class GoFishMain {
 				human.add(deck.get(cardFromPile));
 				deck.remove(cardFromPile);
 			}
+
+			System.out.printf("There are %d cards left in the deck./n", deck.size());
 
 			// Computer's turn
 			if (!computer.isEmpty() && deck.size() > 0) {
@@ -106,6 +109,8 @@ public class GoFishMain {
 				human.add(deck.get(cardFromPile));
 				deck.remove(cardFromPile);
 			}
+
+			System.out.printf("There are %d cards left in the deck./n", deck.size());
 
 			showGame(human, computerPile, humanPile);
 		}
@@ -179,13 +184,16 @@ public class GoFishMain {
 
 			// TODO: If there is a set of four matching cards, put them on the table
 			int books = 0;
+			
 			for (int x = 0; x < requester.size(); x++) {
 				if (card == requester.get(x)) {
 					books++;
 				}
 			}
-			if (books == 3) {
-				System.out.println("4BOOK" + card);
+
+			if (books == 4) {
+				System.out.println("4BOOK");
+
 				requesterPile.add(card);
 				for (int r = 0; r < requester.size(); r++) {
 					if (requester.get(r) == card) {
@@ -241,7 +249,7 @@ public class GoFishMain {
 
 		ArrayList<Integer> createDeck = new ArrayList<Integer>();
 		int i = 0;
-		while (i < 52) {
+		while (i < 51) {
 			int addRankings = i % 13 + 1;
 			createDeck.add(addRankings);
 			i++;

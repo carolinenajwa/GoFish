@@ -1,16 +1,22 @@
 // (Add both our names here)
+
+//CS145 - 4/27/2021 
+
+//Lab 4 - Card Game
+
 // This program outputs a card game called Go Fish!
 // It uses a deck of 52 cards made up of 4 suits and 13 ranks. 
 // In this game, you will go first by default.
-// Rules are as follows, each player ( You vs. Computer) will be delt 7 cards each. This cards will be removed from a shuffled deck.
-// Both players will take turns asking the other for a card that the player already has in its hand. When requested, if the other player does own that card(s) 
-// they must hand over every matching card in their hand of that particular card. After receiving the card(s). The original player can then ask for another card.
-// If the other player does not have the requested card, they will respond "Go Fish!", which means the original player must pick a new card from the deck.
-// If either players do not have any cards in their hand, they are not allowed to request for a card and must pick a new card from the shuffled deck.
-// When all suits of card have been found, the game ends. Winner is the player with the most suits.
-
-
-
+// Rules are as follows, each player ( You vs. Computer) will be delt 7 cards each.
+// This cards will be removed from a shuffled deck. Both players will take turns asking
+// the other for a card that the player already has in its hand. When requested, if the 
+// other player does own that card(s) They must hand over every matching card in their
+// hand of that particular card. After receiving the card(s). The original player can 
+// then ask for another card. If the other player does not have the requested card, 
+// they will respond "Go Fish!", which means the original player must pick a new card 
+// from the deck. If either players do not have any cards in their hand, they are not 
+// allowed to request for a card and must pick a new card from the shuffled deck. When
+// all suits of card have been found, the game ends. Winner is the player with the most suits.
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -18,245 +24,210 @@ import java.util.Scanner;
 import java.util.Random;
 
 
-public class GoFish
-{
-	
-	
+//main
+public class GoFishMain {
+
+	//TODO: no class constants
 	private static final int STARTING_HAND_SIZE = 7;
-	
-	public static void main(String[] args) 
-	{
+
+	public static void main(String[] args) {
 		ArrayList<Integer> deck = newDeck();
 		Scanner input = new Scanner(System.in);
-		
+
 		Collections.shuffle(deck);
-		
+
 		playOneGame(deck, input);
 	}
-	
-	// Plays one game.  
-	public static void playOneGame(ArrayList<Integer> deck, Scanner input)
-	{
+
+	// Plays one game.
+	public static void playOneGame(ArrayList<Integer> deck, Scanner input) {
+
+
 		ArrayList<Integer> computer = new ArrayList<Integer>();
 		ArrayList<Integer> human = new ArrayList<Integer>();
-		ArrayList<Integer> computerPile = new ArrayList<Integer> ();
+		//Array of cards for computer 
+		ArrayList<Integer> computerPile = new ArrayList<Integer>();
+
+		//Array of cards for the user
 		ArrayList<Integer> humanPile = new ArrayList<Integer>();
 
 		// Deals cards to user and computer
 		dealHands(deck, human, computer);
 
-		//  Displays card-hand to user 
+		// Displays card-hand to user
 		showGame(human, computerPile, humanPile);
 		Random random = new Random();
-		
-		
-		while (computerPile.size() + humanPile.size() < 52 || !deck.isEmpty())
-		{
+
+		while (computerPile.size() + humanPile.size() < 52 || !deck.isEmpty()) {
 			// User plays first
-			if (!human.isEmpty())
-			{	
+			if (!human.isEmpty()) {
 				// Requests card from opponent
 				System.out.println("What card will you ask for?(Enter card number)");
 				int card = input.nextInt();
-				
-				
+
 				// Plays one turn
 				playTurn(card, human, computer, humanPile, computerPile, deck);
-			}
-			else
-			{
+			} else {
 				int cardFromPile = random.nextInt(deck.size());
 				human.add(deck.get(cardFromPile));
 				deck.remove(cardFromPile);
 			}
-			
+
 			// Computer's turn
-			if (!computer.isEmpty())
-			{
-				int card = computer.get((int)(Math.random()*computer.size()));	
-				System.out.println("Do you have any "  + card + "'s ?");
-				
+			if (!computer.isEmpty()) {
+				int card = computer.get((int) (Math.random() * computer.size()));
+				System.out.println("Do you have any " + card + "'s ?");
+
 				// Plays one turn
 				playTurn(card, computer, human, computerPile, humanPile, deck);
-			}
-			else if (!deck.isEmpty())
-			{
-				//TODO: Let the computer draw from the deck
+			} else if (!deck.isEmpty()) {
+				// TODO: Let the computer draw from the deck
 				int cardFromPile = random.nextInt(deck.size());
 				human.add(deck.get(cardFromPile));
 				deck.remove(cardFromPile);
 			}
-			
+
 			showGame(human, computerPile, humanPile);
 		}
-		
+
 		// Displays winner
-		if ( humanPile.size() > computerPile.size())
-		{
+		if (humanPile.size() > computerPile.size()) {
 			System.out.println("You win with " + humanPile.size() + " books!");
 		}
-		if ( humanPile.size() < computerPile.size())
-		{
+		if (humanPile.size() < computerPile.size()) {
 			System.out.println("You lose by " + computerPile.size() + " books...");
 		}
-		if ( humanPile.size() == computerPile.size())
-		{
+		if (humanPile.size() == computerPile.size()) {
 			System.out.println("Its a tie! You each have " + computerPile.size() + " books!");
-		}			
+		}
 	}
-	
+
 	// Displays human's hand and completed books
 	public static void showGame(ArrayList<Integer> human, ArrayList<Integer> computerPile,
-			ArrayList<Integer> humanPile)
-	{
+			ArrayList<Integer> humanPile) {
 		System.out.println("Here are your cards");
 		showCards(human);
 		System.out.println("Here is your pile");
 		showCards(humanPile);
 		showCards(computerPile);
 	}
-	
 
-	
-	// Alternates turns. Requester = Player requesting card(S)  and Giver = Player who is being asked a card(s)
+	// Alternates turns. Requester = Player requesting card(S) and Giver = Player
+	// who is being asked a card(s)
 	public static void playTurn(int card, ArrayList<Integer> requester, ArrayList<Integer> giver,
-			ArrayList<Integer> requesterPile, ArrayList<Integer> giverPile, ArrayList<Integer> deck)
-	{
-		if (giver.contains(card))
-		{
+			ArrayList<Integer> requesterPile, ArrayList<Integer> giverPile, ArrayList<Integer> deck) {
+		if (giver.contains(card)) {
 			// Transfers card(s) from giver to requester
 			transferCards(card, requester, giver);
-		
-				
+
 			// Removes suit of 4 from hand and sets it asside
-			for ( int x = 0; x < requester.size(); x++)
-			{
-				int Books = 0;
-					if (card == requester.get(x))
-					{
-						Books = Books + 1;
-					}
-				if(Books == 4)
-				{
+			for (int x = 0; x < requester.size(); x++) {
+				int books = 0;
+				if (card == requester.get(x)) {
+					books = books + 1;
+				}
+				if (books == 4) {
 					requesterPile.add(card);
-					for(int r = 0; r < requester.size()+1; r++)
-					{
-						if (requester.get(r) == card)
-						{
+					for (int r = 0; r < requester.size() + 1; r++) {
+						if (requester.get(r) == card) {
 							requester.remove(r);
 						}
 					}
 				}
-				Books = 0;	
+				books = 0;
 			}
-			
-			
-		}
-		else
-		{
+
+		} else {
 			System.out.println("Go fish!");
-			
+
 			// Draws card from shuffled deck
 			Random random = new Random();
 			int cardFromPile = random.nextInt(deck.size());
 			requester.add(deck.get(cardFromPile));
 			deck.remove(cardFromPile);
-			//TODO: If there is a set of four matching cards, put them on the table
-			int Books = 0;
-			for ( int x = 0; x < requester.size(); x++)
-			{
-					if (card == requester.get(x))
-					{
-						Books++;
-					}
+
+			// TODO: If there is a set of four matching cards, put them on the table
+			int books = 0;
+			for (int x = 0; x < requester.size(); x++) {
+				if (card == requester.get(x)) {
+					books++;
+				}
 			}
-			if(Books == 4)
-			{
+			if (books == 4) {
 				requesterPile.add(card);
-				for(int r = 0; r < requester.size(); r++)
-				{
-					if (requester.get(r) == card)
-					{
+				for (int r = 0; r < requester.size(); r++) {
+					if (requester.get(r) == card) {
 						requester.remove(r);
 					}
 				}
 			}
-			Books = 0;
-		
+			books = 0;
+
 		}
 	}
-	
-	// Transfers card(s) from one player to another. 
-	public static void transferCards(int card, ArrayList<Integer> destination, ArrayList<Integer> source)
-	{
-		while (source.contains(card))
-		{
+
+	// Transfers card(s) from one player to another.
+	public static void transferCards(int card, ArrayList<Integer> destination, ArrayList<Integer> source) {
+		while (source.contains(card)) {
 			destination.add(card);
 			source.remove(new Integer(card)); // this is that tricky thing from the handout
 		}
 	}
-	
+
 	// Deals even shuffled cards from deck to each player
-	public static void dealHands(ArrayList<Integer> deck, ArrayList<Integer> hand1, ArrayList<Integer> hand2)
-	{
-		
+	public static void dealHands(ArrayList<Integer> deck, ArrayList<Integer> hand1, ArrayList<Integer> hand2) {
+
+
+		//generate a random number
 		Random randomNumber = new Random();
+
+		//keep track of iterations
 		int count = 0;
-		while ( count <= STARTING_HAND_SIZE )
-		{
+
+
+		while (count <= STARTING_HAND_SIZE) {
 			int randomIndex = randomNumber.nextInt(deck.size());
 			hand1.add(deck.get(randomIndex));
 			deck.remove(deck.get(randomIndex));
 			count++;
 		}
-		
+
 		count = 0;
-		while ( count <= STARTING_HAND_SIZE )
-		{
+
+		while (count <= STARTING_HAND_SIZE) {
 			int randomIndex = randomNumber.nextInt(deck.size());
 			hand2.add(deck.get(randomIndex));
 			deck.remove(deck.get(randomIndex));
 			count++;
 		}
-		
+
 	}
-	
+
 	// Creates deck of 52 cards, 4 of each rank numbered 1 - 13.
-	public static ArrayList<Integer> newDeck()
-	{
+	public static ArrayList<Integer> newDeck() {
 
 		ArrayList<Integer> createDeck = new ArrayList<Integer>();
 		int i = 0;
-		while (i < 52)
-		{
-			int addRankings = i%13 + 1;
+		while (i < 52) {
+			int addRankings = i % 13 + 1;
 			createDeck.add(addRankings);
 			i++;
 		}
-		
+
+
+		//return the final ArrayList<INT> deck
 		return createDeck;
 	}
-	
 
-	// Displays and sorts cards 
-	public static void showCards(ArrayList<Integer> cards)
-	{
+	// Displays and sorts cards
+	public static void showCards(ArrayList<Integer> cards) {
 
 		Collections.sort(cards);
-	
-		for (Integer i: cards)
-		{
+		//add printf
+		for (Integer i : cards) {
 			System.out.print(i + " ");
 		}
 		System.out.println();
 	}
-   
-   
-          
 
-   
 }
-
-
-
-

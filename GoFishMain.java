@@ -43,6 +43,8 @@ public class GoFishMain {
 		//suffle the deck
 		Collections.shuffle(deck);
 
+
+		//play a game
 		playOneGame(deck, input);
 	}
 
@@ -52,6 +54,7 @@ public class GoFishMain {
 
 		ArrayList<Integer> computer = new ArrayList<Integer>();
 		ArrayList<Integer> human = new ArrayList<Integer>();
+
 		//Array of cards for computer 
 		ArrayList<Integer> computerPile = new ArrayList<Integer>();
 
@@ -63,7 +66,7 @@ public class GoFishMain {
 
 		// Displays card-hand to user
 		showGame(human, computerPile, humanPile);
-		Random random = new Random();
+		Random randomNumber = new Random();
 
 		while (computerPile.size() + humanPile.size() < 52 || !deck.isEmpty()) {
 			// User plays first
@@ -74,8 +77,11 @@ public class GoFishMain {
 
 				// Plays one turn
 				playTurn(card, human, computer, humanPile, computerPile, deck);
+
 			} else {
-				int cardFromPile = random.nextInt(deck.size());
+
+
+				int cardFromPile = randomNumber.nextInt(deck.size());
 				human.add(deck.get(cardFromPile));
 				deck.remove(cardFromPile);
 			}
@@ -87,9 +93,11 @@ public class GoFishMain {
 
 				// Plays one turn
 				playTurn(card, computer, human, computerPile, humanPile, deck);
+
+
 			} else if (!deck.isEmpty()) {
 				// TODO: Let the computer draw from the deck
-				int cardFromPile = random.nextInt(deck.size());
+				int cardFromPile = randomNumber.nextInt(deck.size());
 				human.add(deck.get(cardFromPile));
 				deck.remove(cardFromPile);
 			}
@@ -112,9 +120,9 @@ public class GoFishMain {
 	// Displays human's hand and completed books
 	public static void showGame(ArrayList<Integer> human, ArrayList<Integer> computerPile,
 			ArrayList<Integer> humanPile) {
-		System.out.println("Here are your cards");
+		System.out.println("Here are your cards:");
 		showCards(human);
-		System.out.println("Here is your pile");
+		System.out.println("Here is your pile:");
 		showCards(humanPile);
 		showCards(computerPile);
 	}
@@ -145,11 +153,13 @@ public class GoFishMain {
 			}
 
 		} else {
+
+			//alert the user
 			System.out.println("Go fish!");
 
 			// Draws card from shuffled deck
-			Random random = new Random();
-			int cardFromPile = random.nextInt(deck.size());
+			Random randomNumber = new Random();
+			int cardFromPile = randomNumber.nextInt(deck.size());
 			requester.add(deck.get(cardFromPile));
 			deck.remove(cardFromPile);
 
@@ -168,6 +178,7 @@ public class GoFishMain {
 					}
 				}
 			}
+
 			books = 0;
 
 		}

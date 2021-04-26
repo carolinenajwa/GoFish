@@ -26,6 +26,7 @@ import java.util.Scanner;
 import java.util.Random;
 
 
+
 public class GoFishMain {
 
 	//TODO: no class constants
@@ -52,13 +53,12 @@ public class GoFishMain {
 	public static void playOneGame(ArrayList<Integer> deck, Scanner input) {
 
 
+		//Emptry array of cards in the hand 
 		ArrayList<Integer> computer = new ArrayList<Integer>();
 		ArrayList<Integer> human = new ArrayList<Integer>();
 
-		//Array of cards for computer 
+		//Empty array of cards in the pile 
 		ArrayList<Integer> computerPile = new ArrayList<Integer>();
-
-		//Array of cards for the user
 		ArrayList<Integer> humanPile = new ArrayList<Integer>();
 
 		// Deals cards to user and computer
@@ -66,11 +66,15 @@ public class GoFishMain {
 
 		// Displays card-hand to user
 		showGame(human, computerPile, humanPile);
+
 		Random randomNumber = new Random();
 
+
+		//while the deck is not empty and we don't have more than 52
 		while (computerPile.size() + humanPile.size() < 52 || !deck.isEmpty()) {
+
 			// User plays first
-			if (!human.isEmpty()) {
+			if (!human.isEmpty() && deck.size() > 0) {
 				// Requests card from opponent
 				System.out.println("What card will you ask for?(Enter card number)");
 				int card = input.nextInt();
@@ -79,23 +83,24 @@ public class GoFishMain {
 				playTurn(card, human, computer, humanPile, computerPile, deck);
 
 			} else {
-
-
 				int cardFromPile = randomNumber.nextInt(deck.size());
 				human.add(deck.get(cardFromPile));
 				deck.remove(cardFromPile);
 			}
 
 			// Computer's turn
-			if (!computer.isEmpty()) {
+			if (!computer.isEmpty() && deck.size() > 0) {
 				int card = computer.get((int) (Math.random() * computer.size()));
-				System.out.println("Do you have any " + card + "'s ?");
+				System.out.println(deck.size());
+				//print the question to the user using printf
+				System.out.printf("Do you have any %d's?\n", card);
 
-				// Plays one turn
+				//Plays one turn
 				playTurn(card, computer, human, computerPile, humanPile, deck);
 
 
 			} else if (!deck.isEmpty()) {
+
 				// TODO: Let the computer draw from the deck
 				int cardFromPile = randomNumber.nextInt(deck.size());
 				human.add(deck.get(cardFromPile));
@@ -124,6 +129,7 @@ public class GoFishMain {
 		showCards(human);
 		System.out.println("Here is your pile:");
 		showCards(humanPile);
+		System.out.println("Here is the computer's pile:");
 		showCards(computerPile);
 	}
 
@@ -131,6 +137,8 @@ public class GoFishMain {
 	// who is being asked a card(s)
 	public static void playTurn(int card, ArrayList<Integer> requester, ArrayList<Integer> giver,
 			ArrayList<Integer> requesterPile, ArrayList<Integer> giverPile, ArrayList<Integer> deck) {
+
+		//if the giver has the card
 		if (giver.contains(card)) {
 			// Transfers card(s) from giver to requester
 			transferCards(card, requester, giver);
@@ -138,9 +146,11 @@ public class GoFishMain {
 			// Removes suit of 4 from hand and sets it asside
 			for (int x = 0; x < requester.size(); x++) {
 				int books = 0;
+
 				if (card == requester.get(x)) {
 					books = books + 1;
 				}
+
 				if (books == 4) {
 					requesterPile.add(card);
 					for (int r = 0; r < requester.size() + 1; r++) {
@@ -149,9 +159,11 @@ public class GoFishMain {
 						}
 					}
 				}
+
 				books = 0;
 			}
 
+		//giver does not contain the card
 		} else {
 
 			//alert the user
@@ -159,6 +171,8 @@ public class GoFishMain {
 
 			// Draws card from shuffled deck
 			Random randomNumber = new Random();
+
+			//get a card location to pull from the pile
 			int cardFromPile = randomNumber.nextInt(deck.size());
 			requester.add(deck.get(cardFromPile));
 			deck.remove(cardFromPile);
@@ -170,7 +184,8 @@ public class GoFishMain {
 					books++;
 				}
 			}
-			if (books == 4) {
+			if (books == 3) {
+				System.out.println("4BOOK" + card);
 				requesterPile.add(card);
 				for (int r = 0; r < requester.size(); r++) {
 					if (requester.get(r) == card) {
@@ -240,11 +255,22 @@ public class GoFishMain {
 	// Displays and sorts cards
 	public static void showCards(ArrayList<Integer> cards) {
 
+		//sort cards by size
 		Collections.sort(cards);
-		//add printf
-		for (Integer i : cards) {
-			System.out.print(i + " ");
+		
+
+		//print out cards
+		if(cards.size() > 0){
+			for (Integer i : cards) {
+				System.out.printf("%d ", i);
+			}
+
+		//don't have any cards?
+		} else {
+			System.out.print("No Cards");
 		}
+
+		//jump to a new line
 		System.out.println();
 	}
 

@@ -77,7 +77,7 @@ public class GoFishMain {
 			// User plays first
 			if (!human.isEmpty() && deck.size() > 0) {
 				// Requests card from opponent
-				System.out.println("What card will you ask for?(Enter card number)");
+				System.out.println("What card will you ask for? (Enter card number)");
 				int card = input.nextInt();
 
 				// Plays one turn
@@ -130,10 +130,13 @@ public class GoFishMain {
 	// Displays human's hand and completed books
 	public static void showGame(ArrayList<Integer> human, ArrayList<Integer> computerPile,
 			ArrayList<Integer> humanPile) {
+
 		System.out.println("Here are your cards:");
 		showCards(human);
+		
 		System.out.println("Here is your pile:");
 		showCards(humanPile);
+
 		System.out.println("Here is the computer's pile:");
 		showCards(computerPile);
 	}

@@ -18,46 +18,41 @@
 // allowed to request for a card and must pick a new card from the shuffled deck. When
 // all suits of card have been found, the game ends. Winner is the player with the most suits.
 
-
 //import tools
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Scanner;
 import java.util.Random;
 
-
-
 public class GoFishMain {
 
-	//TODO: no class constants
+	// TODO: no class constants
 	private static final int STARTING_HAND_SIZE = 7;
 
-	//main
+	// main
 	public static void main(String[] args) {
 
-		//create a new deck of cards
+		// create a new deck of cards
 		ArrayList<Integer> deck = newDeck();
 
-		//grab some input
+		// grab some input
 		Scanner input = new Scanner(System.in);
 
-		//suffle the deck
+		// suffle the deck
 		Collections.shuffle(deck);
 
-
-		//play a game
+		// play a game
 		playOneGame(deck, input);
 	}
 
 	// Plays one game.
 	public static void playOneGame(ArrayList<Integer> deck, Scanner input) {
 
-
-		//Emptry array of cards in the hand 
+		// Emptry array of cards in the hand
 		ArrayList<Integer> computer = new ArrayList<Integer>();
 		ArrayList<Integer> human = new ArrayList<Integer>();
 
-		//Empty array of cards in the pile 
+		// Empty array of cards in the pile
 		ArrayList<Integer> computerPile = new ArrayList<Integer>();
 		ArrayList<Integer> humanPile = new ArrayList<Integer>();
 
@@ -69,16 +64,27 @@ public class GoFishMain {
 
 		Random randomNumber = new Random();
 
-
-		//while the deck is not empty and we don't have more than 52
-		while (computerPile.size() + humanPile.size() < 52 || !deck.isEmpty()) {
-
+		// while the deck is not empty and we don't have more than 52
+		while (computerPile.size() + humanPile.size() < 51 || deck.size() > 0) {
 
 			// User plays first
 			if (!human.isEmpty() && deck.size() > 0) {
 				// Requests card from opponent
 				System.out.println("What card will you ask for? (Enter card number)");
-				int card = input.nextInt();
+
+				int card;
+
+				try {
+					card = input.nextInt();
+					if (card < 1 || card > 13) {
+						throw new Exception();
+					}
+				} catch (Exception e) {
+					do {
+						System.out.println("Please enter a number from 1 - 13!");
+						card = input.nextInt();
+					} while (card < 1 || card > 13);
+				}
 
 				// Plays one turn
 				playTurn(card, human, computer, humanPile, computerPile, deck);
@@ -89,41 +95,44 @@ public class GoFishMain {
 				deck.remove(cardFromPile);
 			}
 
-			System.out.printf("There are %d cards left in the deck./n", deck.size());
+			System.out.printf("There are %d cards left in the deck.\n", deck.size());
 
 			// Computer's turn
 			if (!computer.isEmpty() && deck.size() > 0) {
 				int card = computer.get((int) (Math.random() * computer.size()));
 				System.out.println(deck.size());
-				//print the question to the user using printf
+				// print the question to the user using printf
 				System.out.printf("Do you have any %d's?\n", card);
 
-				//Plays one turn
+				// Plays one turn
 				playTurn(card, computer, human, computerPile, humanPile, deck);
-
 
 			} else if (!deck.isEmpty()) {
 
 				// TODO: Let the computer draw from the deck
 				int cardFromPile = randomNumber.nextInt(deck.size());
-				human.add(deck.get(cardFromPile));
+				computer.add(deck.get(cardFromPile));
 				deck.remove(cardFromPile);
 			}
 
-			System.out.printf("There are %d cards left in the deck./n", deck.size());
+			System.out.printf("There are %d cards left in the deck.\n", deck.size());
 
 			showGame(human, computerPile, humanPile);
 		}
 
+		if (deck.size() <= 3) {
+			System.out.println("DEAD DECK");
+		}
+
 		// Displays winner
 		if (humanPile.size() > computerPile.size()) {
-			System.out.println("You win with " + humanPile.size() + " books!");
+			System.out.printf("You win with %d books!", humanPile.size());
 		}
 		if (humanPile.size() < computerPile.size()) {
-			System.out.println("You lose by " + computerPile.size() + " books...");
+			System.out.printf("You lost to the computer, who has %d books...", computerPile.size());
 		}
 		if (humanPile.size() == computerPile.size()) {
-			System.out.println("Its a tie! You each have " + computerPile.size() + " books!");
+			System.out.printf("Its a tie! You each have %d books!", computerPile.size());
 		}
 	}
 
@@ -133,7 +142,7 @@ public class GoFishMain {
 
 		System.out.println("Here are your cards:");
 		showCards(human);
-		
+
 		System.out.println("Here is your pile:");
 		showCards(humanPile);
 
@@ -146,7 +155,7 @@ public class GoFishMain {
 	public static void playTurn(int card, ArrayList<Integer> requester, ArrayList<Integer> giver,
 			ArrayList<Integer> requesterPile, ArrayList<Integer> giverPile, ArrayList<Integer> deck) {
 
-		//if the giver has the card
+		// if the giver has the card
 		if (giver.contains(card)) {
 			// Transfers card(s) from giver to requester
 			transferCards(card, requester, giver);
@@ -171,23 +180,23 @@ public class GoFishMain {
 				books = 0;
 			}
 
-		//giver does not contain the card
+			// giver does not contain the card
 		} else {
 
-			//alert the user
+			// alert the user
 			System.out.println("Go fish!");
 
 			// Draws card from shuffled deck
 			Random randomNumber = new Random();
 
-			//get a card location to pull from the pile
+			// get a card location to pull from the pile
 			int cardFromPile = randomNumber.nextInt(deck.size());
 			requester.add(deck.get(cardFromPile));
 			deck.remove(cardFromPile);
 
 			// TODO: If there is a set of four matching cards, put them on the table
 			int books = 0;
-			
+
 			for (int x = 0; x < requester.size(); x++) {
 				if (card == requester.get(x)) {
 					books++;
@@ -221,13 +230,11 @@ public class GoFishMain {
 	// Deals even shuffled cards from deck to each player
 	public static void dealHands(ArrayList<Integer> deck, ArrayList<Integer> hand1, ArrayList<Integer> hand2) {
 
-
-		//generate a random number
+		// generate a random number
 		Random randomNumber = new Random();
 
-		//keep track of iterations
+		// keep track of iterations
 		int count = 0;
-
 
 		while (count <= STARTING_HAND_SIZE) {
 			int randomIndex = randomNumber.nextInt(deck.size());
@@ -258,30 +265,37 @@ public class GoFishMain {
 			i++;
 		}
 
-
-		//return the final ArrayList<INT> deck
+		// return the final ArrayList<INT> deck
 		return createDeck;
 	}
 
 	// Displays and sorts cards
 	public static void showCards(ArrayList<Integer> cards) {
 
-		//sort cards by size
+		// sort cards by size
 		Collections.sort(cards);
-		
 
-		//print out cards
-		if(cards.size() > 0){
+		// print out cards
+		if (!cards.isEmpty()) {
 			for (Integer i : cards) {
-				System.out.printf("%d ", i);
-			}
+				switch (i) {
+				case 11:
+					System.out.print("Jack ");
+				case 12:
+					System.out.print("Queen ");
+				case 13:
+					System.out.print("King ");
+				default:
+					System.out.printf("%d ", i);
 
-		//don't have any cards?
+				}
+			}
 		} else {
+			// don't have any cards?
 			System.out.print("No Cards");
 		}
 
-		//jump to a new line
+		// jump to a new line
 		System.out.println();
 	}
 

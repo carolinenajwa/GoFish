@@ -1,8 +1,8 @@
-// (Add both our names here)
+// Gavin Stuart and Caroline El Jazmi
 
-//CS145 - 4/27/2021 
+// CS145 - 4/27/2021 
 
-//Lab 4 - Card Game
+// Lab 4 - Card Game
 
 // This program outputs a card game called Go Fish!
 // It uses a deck of 52 cards made up of 4 suits and 13 ranks. 
@@ -18,22 +18,29 @@
 // allowed to request for a card and must pick a new card from the shuffled deck. When
 // all suits of card have been found, the game ends. Winner is the player with the most suits.
 
+
+//import tools
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Scanner;
 import java.util.Random;
 
 
-//main
 public class GoFishMain {
 
 	//TODO: no class constants
 	private static final int STARTING_HAND_SIZE = 7;
 
+	//main
 	public static void main(String[] args) {
+
+		//create a new deck of cards
 		ArrayList<Integer> deck = newDeck();
+
+		//grab some input
 		Scanner input = new Scanner(System.in);
 
+		//suffle the deck
 		Collections.shuffle(deck);
 
 		playOneGame(deck, input);

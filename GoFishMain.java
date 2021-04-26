@@ -281,13 +281,16 @@ public class GoFishMain {
 				switch (i) {
 				case 11:
 					System.out.print("Jack ");
+					break;
 				case 12:
 					System.out.print("Queen ");
+					break;
 				case 13:
 					System.out.print("King ");
+					break;
 				default:
 					System.out.printf("%d ", i);
-
+					break;
 				}
 			}
 		} else {

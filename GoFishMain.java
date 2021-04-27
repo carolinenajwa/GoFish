@@ -65,7 +65,7 @@ public class GoFishMain {
 		Random randomNumber = new Random();
 
 		// while the deck is not empty and we don't have more than 52
-		while (computerPile.size() + humanPile.size() < 51 || deck.size() > 0) {
+		while (computerPile.size() + humanPile.size() <= 51 && deck.size() > 0) {
 
 			// User plays first
 			if (!human.isEmpty() && deck.size() > 0) {
@@ -259,7 +259,7 @@ public class GoFishMain {
 
 		ArrayList<Integer> createDeck = new ArrayList<Integer>();
 		int i = 0;
-		while (i < 51) {
+		while (i <= 51) {
 			int addRankings = i % 13 + 1;
 			createDeck.add(addRankings);
 			i++;

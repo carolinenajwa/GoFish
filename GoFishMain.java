@@ -26,8 +26,6 @@ import java.util.Random;
 
 public class GoFishMain {
 
-	// TODO: no class constants
-	private static final int STARTING_HAND_SIZE = 7;
 
 	// main
 	public static void main(String[] args) {
@@ -248,7 +246,7 @@ public class GoFishMain {
 		// keep track of iterations
 		int count = 0;
 
-		while (count <= STARTING_HAND_SIZE) {
+		while (count <= 7) {
 			int randomIndex = randomNumber.nextInt(deck.size());
 			hand1.add(deck.get(randomIndex));
 			deck.remove(deck.get(randomIndex));
@@ -257,7 +255,7 @@ public class GoFishMain {
 
 		count = 0;
 
-		while (count <= STARTING_HAND_SIZE) {
+		while (count <= 7) {
 			int randomIndex = randomNumber.nextInt(deck.size());
 			hand2.add(deck.get(randomIndex));
 			deck.remove(deck.get(randomIndex));

@@ -204,7 +204,7 @@ public class GoFishMain {
 			}
 
 			if (books == 4) {
-				System.out.println("4BOOK");
+				System.out.println("4BOOK-TEST");
 
 				requesterPile.add(card);
 				for (int r = 0; r < requester.size(); r++) {
@@ -279,18 +279,18 @@ public class GoFishMain {
 		if (!cards.isEmpty()) {
 			for (Integer i : cards) {
 				switch (i) {
-				case 11:
-					System.out.print("Jack ");
-					break;
-				case 12:
-					System.out.print("Queen ");
-					break;
-				case 13:
-					System.out.print("King ");
-					break;
-				default:
-					System.out.printf("%d ", i);
-					break;
+					case 11:
+						System.out.print("Jack ");
+						break;
+					case 12:
+						System.out.print("Queen ");
+						break;
+					case 13:
+						System.out.print("King ");
+						break;
+					default:
+						System.out.printf("%d ", i);
+						break;
 				}
 			}
 		} else {

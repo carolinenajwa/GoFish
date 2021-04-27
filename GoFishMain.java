@@ -64,13 +64,19 @@ public class GoFishMain {
 
 		Random randomNumber = new Random();
 
-		// while the deck is not empty and we don't have more than 52
-		while (computerPile.size() + humanPile.size() < 51 || deck.size() > 0) {
+		// define who is playing
+		String opponent = null;
+
+		// while the deck is not empty and we don't have more than 52 cards
+		// keep the game looping between players
+		while (computerPile.size() + humanPile.size() <= 51 && deck.size() > 0) {
 
 			// User plays first
 			if (!human.isEmpty() && deck.size() > 0) {
 				// Requests card from opponent
 				System.out.println("What card will you ask for? (Enter card number)");
+
+				opponent = "Computer";
 
 				int card;
 
@@ -87,7 +93,7 @@ public class GoFishMain {
 				}
 
 				// Plays one turn
-				playTurn(card, human, computer, humanPile, computerPile, deck);
+				playTurn(card, human, computer, humanPile, computerPile, deck, opponent);
 
 			} else {
 				int cardFromPile = randomNumber.nextInt(deck.size());
@@ -99,13 +105,15 @@ public class GoFishMain {
 
 			// Computer's turn
 			if (!computer.isEmpty() && deck.size() > 0) {
+
+				opponent = "User";
 				int card = computer.get((int) (Math.random() * computer.size()));
 				System.out.println(deck.size());
 				// print the question to the user using printf
 				System.out.printf("Do you have any %d's?\n", card);
 
 				// Plays one turn
-				playTurn(card, computer, human, computerPile, humanPile, deck);
+				playTurn(card, computer, human, computerPile, humanPile, deck, opponent);
 
 			} else if (!deck.isEmpty()) {
 
@@ -120,19 +128,15 @@ public class GoFishMain {
 			showGame(human, computerPile, humanPile);
 		}
 
-		if (deck.size() <= 3) {
-			System.out.println("DEAD DECK");
-		}
-
 		// Displays winner
 		if (humanPile.size() > computerPile.size()) {
-			System.out.printf("You win with %d books!", humanPile.size());
+			System.out.printf("You win with %d book(s)!", humanPile.size());
 		}
 		if (humanPile.size() < computerPile.size()) {
-			System.out.printf("You lost to the computer, who has %d books...", computerPile.size());
+			System.out.printf("You lost to the computer, who has %d book(s)...", computerPile.size());
 		}
 		if (humanPile.size() == computerPile.size()) {
-			System.out.printf("Its a tie! You each have %d books!", computerPile.size());
+			System.out.printf("Its a tie! You each have %d book(s)!", computerPile.size());
 		}
 	}
 
@@ -153,7 +157,7 @@ public class GoFishMain {
 	// Alternates turns. Requester = Player requesting card(S) and Giver = Player
 	// who is being asked a card(s)
 	public static void playTurn(int card, ArrayList<Integer> requester, ArrayList<Integer> giver,
-			ArrayList<Integer> requesterPile, ArrayList<Integer> giverPile, ArrayList<Integer> deck) {
+			ArrayList<Integer> requesterPile, ArrayList<Integer> giverPile, ArrayList<Integer> deck, String sendingPlayer) {
 
 		// if the giver has the card
 		if (giver.contains(card)) {
@@ -184,7 +188,7 @@ public class GoFishMain {
 		} else {
 
 			// alert the user
-			System.out.println("Go fish!");
+			System.out.printf("%s says Go fish!\n", sendingPlayer);
 
 			// Draws card from shuffled deck
 			Random randomNumber = new Random();
@@ -204,7 +208,15 @@ public class GoFishMain {
 			}
 
 			if (books == 4) {
-				System.out.println("4BOOK-TEST");
+				switch (sendingPlayer) {
+					case "User":
+						System.out.println("Computer just got another deck!");
+						break;
+					default:
+						System.out.println("User just got another deck");
+						break;
+					}
+				
 
 				requesterPile.add(card);
 				for (int r = 0; r < requester.size(); r++) {
@@ -259,7 +271,7 @@ public class GoFishMain {
 
 		ArrayList<Integer> createDeck = new ArrayList<Integer>();
 		int i = 0;
-		while (i < 51) {
+		while (i <= 51) {
 			int addRankings = i % 13 + 1;
 			createDeck.add(addRankings);
 			i++;
@@ -279,18 +291,18 @@ public class GoFishMain {
 		if (!cards.isEmpty()) {
 			for (Integer i : cards) {
 				switch (i) {
-					case 11:
-						System.out.print("Jack ");
-						break;
-					case 12:
-						System.out.print("Queen ");
-						break;
-					case 13:
-						System.out.print("King ");
-						break;
-					default:
-						System.out.printf("%d ", i);
-						break;
+				case 11:
+					System.out.print("Jack ");
+					break;
+				case 12:
+					System.out.print("Queen ");
+					break;
+				case 13:
+					System.out.print("King ");
+					break;
+				default:
+					System.out.printf("%d ", i);
+					break;
 				}
 			}
 		} else {

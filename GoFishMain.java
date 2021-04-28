@@ -19,18 +19,14 @@
 // all suits of card have been found, the game ends. Winner is the player with the most suits.
 
 //import tools
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Scanner;
-import java.util.Random;
+import java.util.*;
 
 public class GoFishMain {
 
 	// main
 	public static void main(String[] args) {
 
-
-		//starting hand size 
+		// starting hand size
 		int startingHand = 7;
 
 		// create a new deck of cards
@@ -109,7 +105,7 @@ public class GoFishMain {
 
 				opponent = "User";
 				int card = computer.get((int) (Math.random() * computer.size()));
-				System.out.println(deck.size());
+
 				// print the question to the user using printf
 				System.out.printf("Do you have any %d's?\n", card);
 
@@ -157,7 +153,8 @@ public class GoFishMain {
 	// Alternates turns. Requester = Player requesting card(S) and Giver = Player
 	// who is being asked a card(s)
 	public static void playTurn(int card, ArrayList<Integer> requester, ArrayList<Integer> giver,
-			ArrayList<Integer> requesterPile, ArrayList<Integer> giverPile, ArrayList<Integer> deck, String sendingPlayer) {
+			ArrayList<Integer> requesterPile, ArrayList<Integer> giverPile, ArrayList<Integer> deck,
+			String sendingPlayer) {
 
 		// if the giver has the card
 		if (giver.contains(card)) {
@@ -197,8 +194,10 @@ public class GoFishMain {
 			int cardFromPile = randomNumber.nextInt(deck.size());
 			requester.add(deck.get(cardFromPile));
 			deck.remove(cardFromPile);
-			
+
 			int books = 0;
+
+			Stack<Integer> s = new Stack<>();
 
 			for (int x = 0; x < requester.size(); x++) {
 				if (card == requester.get(x)) {
@@ -207,21 +206,22 @@ public class GoFishMain {
 			}
 
 			if (books == 4) {
-				switch (sendingPlayer) {
-					case "User":
-						System.out.println("Computer just got another deck!");
-						break;
-					default:
-						System.out.println("User just got another deck");
-						break;
-					}
-				
 
 				requesterPile.add(card);
 				for (int r = 0; r < requester.size(); r++) {
 					if (requester.get(r) == card) {
 						requester.remove(r);
+						s.push(card);
 					}
+				}
+
+				switch (sendingPlayer) {
+				case "User":
+					System.out.printf("Computer just got another deck of %ds!\n", s.peek());
+					break;
+				default:
+					System.out.printf("User just got another deck of %ds!\n", s.peek());
+					break;
 				}
 			}
 
@@ -239,7 +239,8 @@ public class GoFishMain {
 	}
 
 	// Deals even shuffled cards from deck to each player
-	public static void dealHands(ArrayList<Integer> deck, ArrayList<Integer> hand1, ArrayList<Integer> hand2, int handSize) {
+	public static void dealHands(ArrayList<Integer> deck, ArrayList<Integer> hand1, ArrayList<Integer> hand2,
+			int handSize) {
 
 		// generate a random number
 		Random randomNumber = new Random();
